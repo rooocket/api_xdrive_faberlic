@@ -81,15 +81,6 @@ foreach ($error_array as $key=>$value) {
 	$errors .= '<tr><td><b>'.$key.'</b></td><td>'.$value.'</td></tr>';
 }
 $errors .= '</table>';
-
-
-if(isset($_GET['dev'])) {
-    //user.checkPhoneInFaberlic
-    $phone = 79969341304;
-	$indo = $api_xdrive->checkPhoneInFaberlic($phone);
-    var_dump($indo);
-}
-
 ?>
 
 <!doctype html>

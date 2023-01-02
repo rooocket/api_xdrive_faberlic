@@ -15,9 +15,9 @@ class apiXDRIVE
 	 * Send verification code
 	 * phone:integer
 	 * method:string
-	 * response:array
 	 * comment: string(100) - необязательный параметр. Будет полезен, если один токен используется на нескольких площадках,
 	 * например, определение источника СПАМа. Можно добавить какой-то личный идентификатор в свободной форме.
+	 * response:array
 	 */
 	public function sendSMS($phone, $comment = '') {
 		$method = 'sms.send';
