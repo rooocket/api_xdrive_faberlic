@@ -30,6 +30,21 @@ class apiXDRIVE
 	}
 
 	/*
+	 * Отправка уведомления владельцу ключа
+	 * method:string
+	 * message:string
+	 * response:array
+	 */
+	public function sendMessageTelegram($message) {
+		$method = 'telegram.send';
+		$data_arr = array(
+			'message' => $message,
+		);
+		$response = self::sendRequest($method, $data_arr);
+		return $response;
+	}
+
+	/*
 	 * Add lead
 	 * $method:string
 	 * $data_arr:array
