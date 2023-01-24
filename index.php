@@ -3,6 +3,8 @@
  * пример простой формы для быстрого старта
  */
 
+//Подключение класса
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/apiXDRIVE.class.php';
 //Введите ваш token
 $api_xdrive = new apiXDRIVE('{YOUR_TOKEN}');
 //Введите регистрационный номер лидера под которого будет производиться регистрация новичка
@@ -81,6 +83,13 @@ foreach ($error_array as $key=>$value) {
 	$errors .= '<tr><td><b>'.$key.'</b></td><td>'.$value.'</td></tr>';
 }
 $errors .= '</table>';
+
+/*
+ * Отправка уведомления в телеграм владельца токена
+$message = 'Hello';
+$tg = $api_xdrive->sendMessageTelegram($message);
+var_dump($tg['response'][0]['ok']);
+*/
 ?>
 
 <!doctype html>
