@@ -40,6 +40,13 @@ if(!empty($post_action)) {
         foreach ($_POST as $key=>$value) {
             $post_data[$key] = strip_tags($value);
         }
+        $fio_arr = isset($post_data['fio']) ? explode(' ', $post_data['fio']) : array();
+
+        unset($post_data['fio']);
+        $post_data['surname'] = isset($fio_arr[0]) ? $fio_arr[0] : '';
+        $post_data['name'] = isset($fio_arr[1]) ? $fio_arr[1] : '';
+        $post_data['patronymic'] = isset($fio_arr[2]) ? $fio_arr[2] : '';
+
         $post_data['return_url'] = $return_url;
         $addLead = $api_xdrive->addLead($post_data);
         if(isset($addLead['addLead'])) {
@@ -100,103 +107,120 @@ var_dump($tg['response'][0]['ok']);
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 	<title>ApiXDRIVE simple form</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <script
             src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
             crossorigin="anonymous"></script>
-    <style>
-        html {
-            font-size: 16px;
-        }
-        body {
-            padding: 5rem 1rem;
-            margin: 0;
-            background: #eee;
-        }
-        .box {
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0.5rem 0.5rem 1rem rgba(0,0,0,0.1);
-            background: #fff;
-        }
-        .sms_btn {
-            color: blue;
-            margin-top: 0.5rem;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-        .sms_btn:hover {
-            opacity: 0.8;
-        }
-        .sms_result {
-            color: red;
-            font-size: 0.8rem;
-        }
-    </style>
+
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
+<div class="page_wrapper">
+    <header>
+        <div class="logo"><img src="img/logo_faberlic.svg" alt="logotype Faberlic" title="logotype Faberlic"> </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/1?q=%3Arelevance%3AperiodShields%3Anew&sponsornumber=<?=$sponsor_id?>">Новинки</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/cosmetics?sponsornumber=<?=$sponsor_id?>">Косметика</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/perfumery?sponsornumber=<?=$sponsor_id?>">Парюмерия</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/clothes-and-accessories?sponsornumber=<?=$sponsor_id?>">Одежда и аксессуары</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/health?sponsornumber=<?=$sponsor_id?>">Здоровье</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/everything-for-home?sponsornumber=<?=$sponsor_id?>">Дом</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/goods-for-kids?sponsornumber=<?=$sponsor_id?>">Детям</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/for-men?sponsornumber=sponsornumber=<?=$sponsor_id?>">Мужчинам</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/for-business?sponsornumber=<?=$sponsor_id?>">Для бизнеса</a></li>
+            <li><a target="_blank" href="https://new.faberlic.com/ru/c/1?q=%3Arelevance%3AperiodShields%3Apromo&sponsornumber=<?=$sponsor_id?>"
+                   class="color_red">AKL</a></li>
+        </ul>
+    </nav>
 
-<div class="row">
-    <div class="col-12 col-sm-4 offset-sm-4">
-        <div class="box">
-            <form method="post">
-                <input type="hidden" name="action" value="add">
-                <input type="hidden" name="sponsor_id" value="<?=$sponsor_id?>">
-                <h2>Fast registration form</h2>
-                <div class="mb-3">
-                    <label class="form-label">Surname</label>
-                    <input type="text" class="form-control" name="surname" value="">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" name="name" value="">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Patronymic</label>
-                    <input type="text" class="form-control" name="patronymic" value="">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Birthday</label>
-                    <input type="text" class="form-control" name="birthday" value="" placeholder="dd.mm.yyyy">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Phone</label>
-                    <input type="text" class="form-control" name="phone" value="" placeholder="+79998887766">
-                    <div class="sms_form">
-                        <div class="sms_btn">Get verification code</div>
+    <h2>Регистрируйся и покупай со <span class="color_red">скидкой 20%</span></h2>
+
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <div class="offer_action">
+                <img src="img/action.jpeg" alt="Акция новичка Faberlic" title="Акция новичка Faberlic">
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="box">
+
+                <form method="post">
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="sponsor_id" value="<?=$sponsor_id?>">
+                    <input type="hidden" name="sex" value="f"><!-- f - женский пол, m - мужской пол -->
+                    <div class="mb-3">
+                        <label class="form-label" for="input_fio">
+                            <span class="input_name">Ваше ФИО</span>
+                            <input type="text" class="form-control" name="fio" value="" id="input_fio" data-required="1">
+                            <span class="error">Заполните обязательное поле</span>
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="input_name">Дата рождения</span>
+                            <input type="text" class="form-date form-control" name="birthday" value="" placeholder="dd.mm.yyyy" data-required="1">
+                            <span class="error">Заполните обязательное поле</span>
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="country">Страна проживания</label>
+                        <select class="form-control" name="country" id="country">
+                            <option value="ru">Россия</option>
+                            <option value="kz">Казахстан</option>
+                            <option value="by">Беларусь</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <span class="input_name">Мобильный телефон</span>
+                        <div class="block_phone">
+                            <label class="form-label">
+                                <input type="text" class="form-phone form-control" name="phone" value="" placeholder="+79998887766" data-required="1">
+                                <span class="error">Заполните обязательное поле</span>
+                            </label>
+                            <div class="sms_form">
+                                <div class="sms_btn">Получить SMS<span>-код</span></div>
+                            </div>
+                        </div>
                         <div class="sms_result" id="sms_result"></div>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">E-mail</label>
-                    <input type="text" class="form-control" name="email" value="">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Sex</label>
-                    <select class="form-control" name="sex" aria-label="Default select example">
-                        <option value="f">female</option>
-                        <option value="m">male</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Country</label>
-                    <select class="form-control" name="country"  aria-label="Default select example">
-                        <option value="ru">Russia</option>
-                        <option value="am">Armenia</option>
-                        <option value="by">Belarus</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Sms confirmation code</label>
-                    <input type="text" class="form-control" name="code" value="">
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="input_name">E-mail</span>
+                            <input type="text" class="form-control" name="email" value="" data-required="1">
+                            <span class="error">Заполните обязательное поле</span>
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="input_name">Введите код из SMS</span>
+                            <input type="text" class="form-code form-control" name="code" value="" data-required="1">
+                            <span class="error">Заполните обязательное поле</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn_check_required">Отправить и получить скидку до 20%</button>
+                    <div class="btn_desc">
+                        <p>Согласие на обработку персональных данных.</p>
+                        <p>Нажимая кнопку «Отправить и получить скидку до 20%» Вы подтверждаете, что даете согласие на обработку своих персональных данных.</p>
+                        <p>Регистрируясь Вы соглашаетесь с условиями соглашения.</p>
+                        <p>Нажимая на кнопку «Подать заявку», я соглашаюсь с условиями Публичной оферты.</p>
+                    </div>
+                </form>
 
-            <?=$errors?>
+            </div>
         </div>
     </div>
+
+    <footer>
+        Сайт лидера №<?=$sponsor_id?> Иванова Иван Ивановича, +79998887766, ivan@ivanovix.ru. Copyright © 2023
+    </footer>
 </div>
+
+
+<script src="js/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+<script src="js/script.js" type="text/javascript"></script>
 <script>
 
     function loadAjaxArr(arr, idx_result) {
@@ -226,7 +250,7 @@ var_dump($tg['response'][0]['ok']);
             loadAjaxArr(post_arr, 'sms_result');
 
         } else {
-            $('#sms_result').html('Error request');
+            $('#sms_result').html('Необходимо заполнить номер телефона');
         }
 
     })
